@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Chatbot Interface</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+            }
+            #chat-container {
+                width: 80%;
+                height: 400px;
+                margin: auto;
+                border: 1px solid #ccc;
+                padding: 8px;
+                overflow-y: scroll;
+            }
+            #user-input {
+                width: 80%;
+                margin: auto;
+                display: flex;
+            }
+            input[type="text"] {
+                flex-grow: 1;
+                padding: 8px;
+            }
+            button {
+                padding: 8px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="chat-container"></div>
+        <div id="user-input">
+            <input
+                type="text"
+                id="input-field"
+                placeholder="Type your message..."
+            />
+            <button onclick="sendMessage()">Send</button>
+        </div>
+
+        <script>
+            const inputField = document.getElementById("input-field");
+            const chatContainer = document.getElementById("chat-container");
+
+            async function sendMessage() {
+                const message = inputField.value;
+                inputField.value = ""; // Clear input field
+
+                // Display user message
+                const userDiv = document.createElement("div");
+                userDiv.textContent = "You: " + message;
+                chatContainer.appendChild(userDiv);
+
+                try {
+                    // Call the chatbot API
+                    const response = await fetch(
+                        `http://127.0.0.1:8000/chat/${encodeURIComponent(message)}`,
+                        {
+                            method: "GET",
+                        },
+                    );
+                    const responseData = await response.json();
+
+                    // Display chatbot response
+                    const botDiv = document.createElement("div");
+                    botDiv.textContent = "Chatbot: " + responseData.response; // Adjust based on response structure
+                    chatContainer.appendChild(botDiv);
+                } catch (error) {
+                    console.error("Failed to fetch:", error);
+                    // Display error message in chat
+                    const errorDiv = document.createElement("div");
+                    errorDiv.textContent = "Error contacting the chatbot";
+                    chatContainer.appendChild(errorDiv);
+                }
+            }
+        </script>
+    </body>
+</html>
