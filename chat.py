@@ -66,7 +66,7 @@ def get_Response(sentence):
                         f"{botName}: {random.choice(intent['responses'])}\nYou: "
                     )
                     result = mathsSolver(expression)
-                    return f"{botName}: Uhhh, is it: {result}. Lets hope so :D"
+                    return f"{botName}: The answer for that is {result}. Lets hope so :D"
 
 
                 else:
