@@ -7,7 +7,13 @@ import threading, re
 import numpy as np
 from model import NeuraNet
 from nltk_utils import bag_of_words, tokenize
-from ExtraFunctionality import get_current_time, set_timer, mathsSolver
+from ExtraFunctionality import get_current_time, set_timer, mathsSolver, weatherFind
+
+
+
+
+
+
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 with open("intents.json", "r") as file:
@@ -50,6 +56,8 @@ def get_Response(sentence):
                     response = random.choice(intent["responses"])
                     formattedResponse = response % current_time
                     return f"{botName}: {formattedResponse}"
+                elif tag == "weather":
+                    return [f"{random.choice(intent['responses'])}"]
                 elif tag == "set_timer":
                     seconds = int(input(f"{botName}: How many seconds?\nYou: "))
                     set_timer(seconds, botName)
@@ -59,8 +67,11 @@ def get_Response(sentence):
                     )
                     result = mathsSolver(expression)
                     return f"{botName}: Uhhh, is it: {result}. Lets hope so :D"
+
+
                 else:
                     return f"{botName}: {random.choice(intent['responses'])}"
+        
     else:
         return f"{botName}: I do not understand..."
 
